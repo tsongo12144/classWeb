@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+#container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+}
+
+#status {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #666;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 20px auto;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cell:hover {
+    background-color: #d0d0d0;
+}
+
+.cell.X {
+    color: #007bff;
+}
+
+.cell.O {
+    color: #ff4d4d;
+}
+
+#resetButton {
+    margin: 20px 0;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+#resetButton:hover {
+    background-color: #0056b3;
+}
+</style>
+<body>
+    <div id="container">
+        <h1>Tic-Tac-Toe</h1>
+        <p id="status">Player X's Turn</p>
+        <div id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <button id="resetButton">Reset Game</button>
+    </div>
+    <script >
+        // DOM Selectors
+const statusText = document.getElementById('status');
+const cells = document.querySelectorAll('.cell');
+const resetButton = document.getElementById('resetButton');
+
+// Game Variables
+let currentPlayer = 'X';
+let gameActive = true;
+let gameState = ['', '', '', '', '', '', '', '', ''];
+
+// Winning Conditions
+const winningConditions = [
+    [0, 1, 2], // Top row
+    [3, 4, 5], // Middle row
+    [6, 7, 8], // Bottom row
+    [0, 3, 6], // Left column
+    [1, 4, 7], // Middle column
+    [2, 5, 8], // Right column
+    [0, 4, 8], // Diagonal
+    [2, 4, 6]  // Diagonal
+];
+
+// Event Listeners
+cells.forEach(cell => {
+    cell.addEventListener('click', handleCellClick);
+});
+
+resetButton.addEventListener('click', resetGame);
+
+// Functions
+function handleCellClick(event) {
+    const clickedCell = event.target;
+    const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
+
+    // Check if the cell is already occupied or the game is over
+    if (gameState[clickedCellIndex] !== '' || !gameActive) {
+        return;
+    }
+
+    // Update game state and UI
+    gameState[clickedCellIndex] = currentPlayer;
+    clickedCell.textContent = currentPlayer;
+    clickedCell.classList.add(currentPlayer);
+
+    // Check for a winner
+    checkForWinner();
+}
+
+function checkForWinner() {
+    let roundWon = false;
+
+    for (let condition of winningConditions) {
+        const [a, b, c] = condition;
+        if (gameState[a] === '' || gameState[b] === '' || gameState[c] === '') {
+            continue;
+        }
+        if (gameState[a] === gameState[b] && gameState[b] === gameState[c]) {
+            roundWon = true;
+            break;
+        }
+    }
+
+    if (roundWon) {
+        statusText.textContent = `Player ${currentPlayer} Wins!`;
+        gameActive = false;
+        return;
+    }
+
+    // Check for a draw
+    if (!gameState.includes('')) {
+        statusText.textContent = 'Draw!';
+        gameActive = false;
+        return;
+    }
+
+    // Switch players
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    statusText.textContent = `Player ${currentPlayer}'s Turn`;
+}
+
+function resetGame() {
+    currentPlayer = 'X';
+    gameActive = true;
+    gameState = ['', '', '', '', '', '', '', '', ''];
+    statusText.textContent = `Player ${currentPlayer}'s Turn`;
+    cells.forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('X', 'O');
+    });
+}
+    </script>
+</body>
+</html>

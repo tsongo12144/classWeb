@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style Changer App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    body {
+font-family: Rubik, sans-serif;
+text-align: center;
+margin: 0;
+padding: 20px;
+background-color: #f4f4f4;
+}
+
+#container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#title {
+    color: #333;
+}
+
+#description {
+    color: #666;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#box {
+    margin: 20px auto;
+    padding: 50px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.box-shadow {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1 id="title">Welcome to the Style Changer App</h1>
+        <p id="description">Click the buttons below to change the styles dynamically.</p>
+        <button id="colorButton">Change Text Color</button>
+        <button id="bgButton">Change Background Color</button>
+        <button id="toggleClassButton">Toggle Box Shadow</button>
+        <div id="box">This is a box!</div>
+    </div>
+    <script>
+        // DOM Selectors
+const title = document.getElementById('title');
+const description = document.getElementById('description');
+const colorButton = document.getElementById('colorButton');
+const bgButton = document.getElementById('bgButton');
+const toggleClassButton = document.getElementById('toggleClassButton');
+const box = document.getElementById('box');
+
+// Event Listeners
+colorButton.addEventListener('click', () => {
+    title.style.color = getRandomColor();
+    description.style.color = getRandomColor();
+});
+
+bgButton.addEventListener('click', () => {
+    box.style.backgroundColor = getRandomColor();
+});
+
+toggleClassButton.addEventListener('click', () => {
+    box.classList.toggle('box-shadow');
+});
+
+// Helper Function to Generate Random Colors
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+    </script>
+</body>
+</html>
